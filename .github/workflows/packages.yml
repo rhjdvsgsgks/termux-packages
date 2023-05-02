@@ -18,7 +18,7 @@ on:
       packages:
         description: "A space-separated names of packages selected for rebuilding"
         required: true
-        
+
 permissions: {} # none
 
 jobs:
@@ -61,21 +61,21 @@ jobs:
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r "${BASE_COMMIT}" "HEAD")
           fi
         fi
-        mkdir -p ./artifacts ./debs
-        touch ./debs/.placeholder
+        mkdir -p ./artifacts ./pkgs
+        touch ./pkgs/.placeholder
 
         if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
           # Process tag '%ci:no-build' that may be added as line to commit message.
           # Forces CI to cancel current build with status 'passed'
           if grep -qiP '^\s*%ci:no-build\s*$' <(git log --format="%B" -n 1 "HEAD"); then
-            tar cf artifacts/debs-${{ matrix.target_arch }}.tar debs
+            tar cf artifacts/pkgs-${{ matrix.target_arch }}.tar pkgs
             echo "[!] Force exiting as tag '%ci:no-build' was applied to HEAD commit message."
             exit 0
           fi
 
           # Build local Docker image if setup scripts were changed.
           # Useful for pull requests submitting changes for both build environment and packages.
-          if grep -qP '^scripts/(Dockerfile|properties\.sh|setup-android-sdk\.sh|setup-ubuntu\.sh)$' <<< "$CHANGED_FILES"; then
+          if grep -qP '^scripts/(Dockerfile|setup-android-sdk\.sh|setup-ubuntu\.sh)$' <<< "$CHANGED_FILES"; then
             echo "Detected changes for environment setup scripts. Building custom Docker image now."
             cd ./scripts
             docker build -t ghcr.io/termux/package-builder:latest .
@@ -110,7 +110,7 @@ jobs:
                     echo "$(basename "${file%%.subpackage.sh}")" >> ./built_${repo}_subpackages.txt
                   done
                 else
-                  echo "$pkg" >> ./deleted_${repo}_packages
+                  echo "$pkg" >> ./deleted_${repo}_packages.txt
                 fi
               fi
             done<<<${CHANGED_FILES}
@@ -139,15 +139,15 @@ jobs:
         for repo in $(jq --raw-output '.[].name' repo.json); do
           # Fix so that lists do not contain duplicates
           if [ -f ./built_${repo}_packages.txt ]; then
-            sort ./built_${repo}_packages.txt | uniq > ./built_${repo}_packages.txt.tmp
+            uniq ./built_${repo}_packages.txt > ./built_${repo}_packages.txt.tmp
             mv ./built_${repo}_packages.txt.tmp ./built_${repo}_packages.txt
           fi
           if [ -f ./built_${repo}_subpackages.txt ]; then
-            sort ./built_${repo}_subpackages.txt | uniq > ./built_${repo}_subpackages.txt.tmp
+            uniq ./built_${repo}_subpackages.txt > ./built_${repo}_subpackages.txt.tmp
             mv ./built_${repo}_subpackages.txt.tmp ./built_${repo}_subpackages.txt
           fi
           if [ -f ./deleted_${repo}_packages.txt ]; then
-            sort ./deleted_${repo}_packages.txt | uniq > ./deleted_${repo}_packages.txt.tmp
+            uniq ./deleted_${repo}_packages.txt > ./deleted_${repo}_packages.txt.tmp
             mv ./deleted_${repo}_packages.txt.tmp ./deleted_${repo}_packages.txt
           fi
         done
@@ -188,7 +188,7 @@ jobs:
         done
 
         if [ ! -z "$packages" ]; then
-          ./scripts/run-docker.sh ./build-package.sh -I -a ${{ matrix.target_arch }} $packages
+          ./scripts/run-docker.sh ./build-package.sh --format pacman -I -a ${{ matrix.target_arch }} $packages
         fi
 
     - name: Generate build artifacts
@@ -197,33 +197,31 @@ jobs:
         test -d termux-packages/output && mv termux-packages/output/* ./output/
 
         for repo in $(jq --raw-output '.[].name' repo.json); do
-          # Put package lists into directory with *.deb files so they will be transferred to
+          # Put package lists into directory with *.pkg.* files so they will be transferred to
           # upload job.
-          test -f ./built_${repo}_packages.txt && mv ./built_${repo}_packages.txt ./debs/
-          test -f ./built_${repo}_subpackages.txt && cat ./built_${repo}_subpackages.txt >> ./debs/built_${repo}_packages.txt \
+          test -f ./built_${repo}_packages.txt && mv ./built_${repo}_packages.txt ./pkgs/
+          test -f ./built_${repo}_subpackages.txt && cat ./built_${repo}_subpackages.txt >> ./pkgs/built_${repo}_packages.txt \
             && rm ./built_${repo}_subpackages.txt
-          test -f ./deleted_${repo}_packages.txt && mv ./deleted_${repo}_packages.txt ./debs/
+          test -f ./deleted_${repo}_packages.txt && mv ./deleted_${repo}_packages.txt ./pkgs/
 
-          # Move only debs from built_packages into debs/ folder before
+          # Move only pkgs from built_packages into pkgs/ folder before
           # creating an archive.
           while read -r pkg; do
-            # Match both $pkg.deb and $pkg-static.deb.
-            find output \( -name "$pkg_*" -o -name "$pkg-static_*" \) -type f -print0 | xargs -0r mv -t debs/
-          done < <(cat ./debs/built_${repo}_packages.txt)
+            # Match both $pkg.pkg.* and $pkg-static.pkg.*.
+            find output \( -name "$pkg-*.pkg.*" -o -name "$pkg-static-*.pkg.*" \) -type f -print0 | xargs -0r mv -t pkgs/
+          done < <(cat ./pkgs/built_${repo}_packages.txt)
         done
 
         # Files containing certain symbols (e.g. ":") will cause failure in actions/upload-artifact.
-        # Archiving *.deb files in a tarball to avoid issues with uploading.
-        tar cf artifacts/debs-${{ matrix.target_arch }}-${{ github.sha }}.tar debs
-    - name: Checksums for built *.deb files
+        # Archiving *.pkg.* files in a tarball to avoid issues with uploading.
+        tar cf artifacts/pkgs-${{ matrix.target_arch }}-${{ github.sha }}.tar pkgs
+    - name: Checksums for built *.pkg.* files
       if: always()
       run: |
-        find debs -type f -name "*" -exec sha256sum "{}" \; | sort -k2
-    - name: Store *.deb files
+        find pkgs -type f -name "*.pkg.*" -exec sha256sum "{}" \; | sort -k2
+    - name: Store *.pkg.* files
       if: always()
       uses: actions/upload-artifact@v3
       with:
-        name: debs-${{ matrix.target_arch }}-${{ github.sha }}
+        name: pkgs-${{ matrix.target_arch }}-${{ github.sha }}
         path: ./artifacts
-
-  
