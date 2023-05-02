@@ -27,7 +27,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dshared-llvm=disabled
 -Dplatforms=x11,wayland
 -Dgallium-drivers=swrast,virgl,freedreno
--Dfreedreno-kgsl=true
 -Dfreedreno-kmds=kgsl
 -Dvulkan-drivers=swrast
 -Dosmesa=true
