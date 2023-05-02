@@ -28,10 +28,11 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dplatforms=x11,wayland
 -Dgallium-drivers=swrast,virgl,freedreno
 -Dfreedreno-kgsl=true
+-Dfreedreno-kmds=kgsl
 -Dvulkan-drivers=swrast
 -Dosmesa=true
 -Dglvnd=true
--Dxmlconfig=enabled
+-Dxmlconfig=disabled
 "
 
 termux_step_pre_configure() {
