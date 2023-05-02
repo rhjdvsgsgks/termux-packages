@@ -31,7 +31,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 -Dvulkan-drivers=swrast
 -Dosmesa=true
 -Dglvnd=true
--Dxmlconfig=disabled
+-Dxmlconfig=enabled
 "
 
 termux_step_pre_configure() {
