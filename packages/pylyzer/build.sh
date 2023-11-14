@@ -13,5 +13,5 @@ termux_step_pre_configure() {
 }
 
 termux_step_post_get_source() {
-	rm -f pyproject.toml
+	rm -f pyproject.toml setup.py
 }
