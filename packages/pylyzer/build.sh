@@ -8,10 +8,6 @@ TERMUX_PKG_SHA256=c07e9adba4a475cfce76fafbf34fdd7153e2ccecdad3bbb01eb99b53d7b664
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
 
-termux_step_pre_configure() {
-	termux_setup_rust
-}
-
 termux_step_post_get_source() {
 	rm -f pyproject.toml setup.py
 }
