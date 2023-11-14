@@ -11,3 +11,7 @@ TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_pre_configure() {
 	termux_setup_rust
 }
+
+termux_step_post_get_source() {
+	rm -f pyproject.toml
+}
