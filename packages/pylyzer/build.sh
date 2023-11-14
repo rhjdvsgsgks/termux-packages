@@ -7,3 +7,7 @@ TERMUX_PKG_SRCURL="https://github.com/mtshiba/pylyzer/archive/refs/tags/v$TERMUX
 TERMUX_PKG_SHA256=c07e9adba4a475cfce76fafbf34fdd7153e2ccecdad3bbb01eb99b53d7b66484
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_BUILD_IN_SRC=true
+
+termux_step_pre_configure() {
+	termux_setup_rust
+}
