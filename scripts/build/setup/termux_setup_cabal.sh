@@ -18,7 +18,7 @@ termux_setup_cabal() {
 
 		termux_download "https://github.com/rhjdvsgsgks/ghc-cross-tools/releases/download/cabal-install-v${TERMUX_CABAL_VERSION}/cabal-install-${TERMUX_CABAL_VERSION}.tar.xz" \
 			"${TERMUX_CABAL_TAR}" \
-			4f5eaa7fd72d87efaa3444003f5847cb4cd5c4ea5e0883b551487d43fb5752b5
+			03b4eed602098b3138e17752589f02497314a9fbf06e1e683c4c03125d63e1a7
 
 		mkdir -p "${TERMUX_CABAL_RUNTIME_FOLDER}"
 		tar xf "${TERMUX_CABAL_TAR}" -C "${TERMUX_CABAL_RUNTIME_FOLDER}"
