@@ -2,9 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://opencv.org/
 TERMUX_PKG_DESCRIPTION="Open Source Computer Vision Library"
 TERMUX_PKG_LICENSE="Apache-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=4.8.0
+TERMUX_PKG_VERSION="4.9.0"
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_SRCURL=https://github.com/opencv/opencv/archive/${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=cbf47ecc336d2bff36b0dcd7d6c179a9bb59e805136af6b9670ca944aef889bd
+TERMUX_PKG_SHA256=ddf76f9dffd322c7c3cb1f721d0887f62d747b82059342213138dc190f28bc6c
 TERMUX_PKG_DEPENDS="abseil-cpp, ffmpeg, libc++, libjpeg-turbo, libopenblas, libpng, libtiff, libwebp, openjpeg, openjpeg-tools, zlib"
 # For static libprotobuf see
 # https://github.com/termux/termux-packages/issues/16979
@@ -22,6 +23,8 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 
 termux_step_pre_configure() {
 	termux_setup_protobuf
+	TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" -DProtobuf_PROTOC_EXECUTABLE=$(command -v protoc)"
+	sed -i 's/COMMAND\sprotobuf::protoc/COMMAND ${Protobuf_PROTOC_EXECUTABLE}/g' $TERMUX_PREFIX/lib/cmake/protobuf/protobuf-generate.cmake
 
 	CXXFLAGS+=" -std=c++14"
 	LDFLAGS+=" -lutf8_range -lutf8_validity"
@@ -47,5 +50,5 @@ termux_step_post_make_install() {
 }
 
 termux_step_post_massage() {
-	rm -f lib/libprotobuf.so
+	rm -rf lib/libprotobuf.so lib/cmake/protobuf/
 }

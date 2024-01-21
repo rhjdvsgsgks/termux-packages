@@ -3,9 +3,10 @@ TERMUX_PKG_DESCRIPTION="Library for reading information from media files"
 TERMUX_PKG_LICENSE="BSD 2-Clause"
 TERMUX_PKG_LICENSE_FILE="../../../LICENSE"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=23.09
+TERMUX_PKG_VERSION=23.11
 TERMUX_PKG_SRCURL=https://mediaarea.net/download/source/libmediainfo/${TERMUX_PKG_VERSION}/libmediainfo_${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=1c326f166572ac6c2c1c88a6d53af7e451388840c7eebeec71d5abbfd1bb2ed3
+TERMUX_PKG_SHA256=197e54fcc79e3c0d5df44a8f58dc4e018bc2f85d13fa3bed54af3dc56d5e853d
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_DEPENDS="libc++, libcurl, libzen, zlib"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-shared --enable-static --with-libcurl"
 

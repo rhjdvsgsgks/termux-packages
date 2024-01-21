@@ -2,11 +2,11 @@ TERMUX_PKG_HOMEPAGE=http://www.xmlsoft.org
 TERMUX_PKG_DESCRIPTION="Library for parsing XML documents"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_MAINTAINER="@termux"
-_MAJOR_VERSION=2.11
-TERMUX_PKG_VERSION=${_MAJOR_VERSION}.4
-TERMUX_PKG_REVISION=2
+TERMUX_PKG_VERSION="2.12.4"
+_MAJOR_VERSION="${TERMUX_PKG_VERSION%.*}"
 TERMUX_PKG_SRCURL=https://download.gnome.org/sources/libxml2/${_MAJOR_VERSION}/libxml2-${TERMUX_PKG_VERSION}.tar.xz
-TERMUX_PKG_SHA256=737e1d7f8ab3f139729ca13a2494fd17bf30ddb4b7a427cf336252cab57f57f7
+TERMUX_PKG_SHA256=497360e423cf0bd99eacdb7c6215dea92e6d6e89ee940393c2bae0e77cb9b7d0
+TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_SETUP_PYTHON=true
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --with-python
@@ -26,5 +26,10 @@ termux_step_post_massage() {
 	# Check if SONAME is properly set:
 	if ! readelf -d lib/libxml2.so | grep -q '(SONAME).*\[libxml2\.so\.'; then
 		termux_error_exit "SONAME for libxml2.so is not properly set."
+	fi
+
+	local _GUARD_FILE="lib/libxml2.so.2"
+	if [ ! -e "${_GUARD_FILE}" ]; then
+		termux_error_exit "Error: file ${_GUARD_FILE} not found."
 	fi
 }
