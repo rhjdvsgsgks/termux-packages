@@ -7,4 +7,4 @@ TERMUX_PKG_SRCURL="https://hackage.haskell.org/package/matterhorn-${TERMUX_PKG_V
 TERMUX_PKG_SHA256=d2c0e80fe00ba7fc28019392cbf7cac40812faa5c1564236af5a458c179241e7
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_DEPENDS="libgmp, zlib"
-TERMUX_PKG_BUILD_DEPENDS="ghc-libs, ghc"
+TERMUX_PKG_BUILD_DEPENDS="cabal-install, ghc"
