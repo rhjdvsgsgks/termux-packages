@@ -1,3 +1,5 @@
+set -x
+
 termux_step_make() {
 	[ "$TERMUX_PKG_METAPACKAGE" = "true" ] && return
 
