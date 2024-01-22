@@ -1,4 +1,4 @@
-set -x
+
 
 termux_step_make() {
 	[ "$TERMUX_PKG_METAPACKAGE" = "true" ] && return
@@ -11,7 +11,7 @@ termux_step_make() {
 	if test -f build.ninja; then
 		ninja -w dupbuild=warn -j $TERMUX_MAKE_PROCESSES
 	elif ls ./*.cabal &>/dev/null; then
-		cabal build
+		cabal build || true
   cat /home/builder/.cache/cabal/logs/ghc-9.2.5/entropy-*
 	elif ls ./*akefile &>/dev/null || [ ! -z "$TERMUX_PKG_EXTRA_MAKE_ARGS" ]; then
 		if [ -z "$TERMUX_PKG_EXTRA_MAKE_ARGS" ]; then
