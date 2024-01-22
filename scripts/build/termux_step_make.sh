@@ -10,6 +10,7 @@ termux_step_make() {
 		ninja -w dupbuild=warn -j $TERMUX_MAKE_PROCESSES
 	elif ls ./*.cabal &>/dev/null; then
 		cabal build
+  cat /home/builder/.cache/cabal/logs/ghc-9.2.5/entropy-*
 	elif ls ./*akefile &>/dev/null || [ ! -z "$TERMUX_PKG_EXTRA_MAKE_ARGS" ]; then
 		if [ -z "$TERMUX_PKG_EXTRA_MAKE_ARGS" ]; then
 			make -j $TERMUX_MAKE_PROCESSES $QUIET_BUILD
