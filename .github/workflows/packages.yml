@@ -206,6 +206,7 @@ jobs:
             sudo rm -fr /opt/ghc /opt/hostedtoolcache /usr/lib/node_modules /usr/local/share/boost /usr/share/dotnet /usr/share/swift
           fi
         fi
+        df -h
 
     - name: Build packages
       run: |
