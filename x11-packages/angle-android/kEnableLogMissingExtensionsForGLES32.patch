@@ -1,0 +1,13 @@
+diff --git a/src/libANGLE/renderer/vulkan/vk_caps_utils.cpp b/src/libANGLE/renderer/vulkan/vk_caps_utils.cpp
+index ed3c326..3db19e5 100644
+--- a/src/libANGLE/renderer/vulkan/vk_caps_utils.cpp
++++ b/src/libANGLE/renderer/vulkan/vk_caps_utils.cpp
+@@ -24,7 +24,7 @@
+ namespace
+ {
+ constexpr unsigned int kComponentsPerVector         = 4;
+-constexpr bool kEnableLogMissingExtensionsForGLES32 = false;
++constexpr bool kEnableLogMissingExtensionsForGLES32 = true;
+ }  // anonymous namespace
+ 
+ namespace rx
