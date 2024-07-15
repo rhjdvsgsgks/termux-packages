@@ -1,7 +1,7 @@
 target_os = "android"
 target_cpu = "@TARGET_OS@"
 is_component_build = false
-is_debug = false
+is_debug = true
 angle_enable_trace = true
 angle_enable_gl = @ENABLE_GL@
 angle_enable_vulkan = @ENABLE_VULKAN@
