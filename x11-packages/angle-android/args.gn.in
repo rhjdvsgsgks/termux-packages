@@ -9,3 +9,6 @@ android32_ndk_api_level = @TERMUX_PKG_API_LEVEL@
 android64_ndk_api_level = @TERMUX_PKG_API_LEVEL@
 angle_build_tests = false
 angle_use_vulkan_null_display = @USE_VULKAN_NULL@
+angle_enable_trace_android_logcat = true
+angle_enable_trace_events = true
+angle_always_log_info = true
