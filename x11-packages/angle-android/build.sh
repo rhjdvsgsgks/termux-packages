@@ -66,23 +66,6 @@ termux_step_host_build() {
 		termux_error_exit "Unsupported arch: $TERMUX_ARCH"
 	fi
 
-	# Build with Android's GL
-	mkdir -p out/android
-	sed -e"s|@TARGET_OS@|$_target_os|g" \
-		-e "s|@ENABLE_GL@|true|g" \
-		-e "s|@ENABLE_VULKAN@|false|g" \
-		-e "s|@USE_VULKAN_NULL@|false|g" \
-		-e "s|@TERMUX_PKG_API_LEVEL@|$TERMUX_PKG_API_LEVEL|g" \
-		$TERMUX_PKG_BUILDER_DIR/args.gn.in > out/android/args.gn
-	pushd $TERMUX_PKG_SRCDIR
-	gn gen $TERMUX_PKG_HOSTBUILD_DIR/out/android --export-compile-commands
-	popd
-	ninja -C out/android
-	mkdir -p build/gl
-	cp out/android/apks/AngleLibraries.apk build/gl/
-	pushd build/gl
-	unzip AngleLibraries.apk
-	popd
 
 	# Build with Android's Vulkan
 	mkdir -p out/android
@@ -102,23 +85,6 @@ termux_step_host_build() {
 	unzip AngleLibraries.apk
 	popd
 
-	# Build with Android's Vulkan null display
-	mkdir -p out/android
-	sed -e "s|@TARGET_OS@|$_target_os|g" \
-		-e "s|@ENABLE_GL@|false|g" \
-		-e "s|@ENABLE_VULKAN@|true|g" \
-		-e "s|@USE_VULKAN_NULL@|true|g" \
-		-e "s|@TERMUX_PKG_API_LEVEL@|$TERMUX_PKG_API_LEVEL|g" \
-		$TERMUX_PKG_BUILDER_DIR/args.gn.in > out/android/args.gn
-	pushd $TERMUX_PKG_SRCDIR
-	gn gen $TERMUX_PKG_HOSTBUILD_DIR/out/android --export-compile-commands
-	popd
-	ninja -C out/android
-	mkdir -p build/vulkan-null
-	cp out/android/apks/AngleLibraries.apk build/vulkan-null/
-	pushd build/vulkan-null
-	unzip AngleLibraries.apk
-	popd
 }
 
 termux_step_configure() {
@@ -149,7 +115,7 @@ termux_step_make_install() {
 	fi
 
 	local _type
-	for _type in gl vulkan vulkan-null; do
+	for _type in  vulkan ; do
 		mkdir -p $TERMUX_PREFIX/opt/angle-android/$_type
 		cp -v $TERMUX_PKG_HOSTBUILD_DIR/build/$_type/lib/$_lib_dir/*.so $TERMUX_PREFIX/opt/angle-android/$_type/
 	done
