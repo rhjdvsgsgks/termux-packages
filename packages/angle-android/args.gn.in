@@ -11,3 +11,4 @@ angle_build_tests = false
 angle_use_vulkan_null_display = @USE_VULKAN_NULL@
 angle_expose_non_conformant_extensions_and_versions = true
 angle_enable_gl_desktop_frontend = true
+is_official_build = true   # for performance
