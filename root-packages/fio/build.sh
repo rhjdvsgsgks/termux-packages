@@ -22,3 +22,7 @@ termux_pkg_auto_update() {
 termux_step_pre_configure() {
 	sed -i "s/@VERSION@/${TERMUX_PKG_VERSION}/g" $TERMUX_PKG_SRCDIR/Makefile
 }
+
+termux_step_post_configure() {
+	cat config.log
+}
