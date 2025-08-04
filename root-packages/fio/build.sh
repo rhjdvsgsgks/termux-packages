@@ -6,7 +6,7 @@ TERMUX_PKG_VERSION="3.40"
 TERMUX_PKG_SRCURL=https://github.com/axboe/fio/archive/refs/tags/fio-${TERMUX_PKG_VERSION}.tar.gz
 TERMUX_PKG_SHA256=9fc81e3a490a53fe821d76dd759d64f229d0ac6b4d2c711837bcad158242e3b2
 TERMUX_PKG_DEPENDS="openssl, libandroid-shmem, libaio"
-TERMUX_PKG_BUILD_DEPENDS="curl"
+TERMUX_PKG_BUILD_DEPENDS="libcurl"
 TERMUX_PKG_SUGGESTS="python"
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+"
@@ -22,7 +22,7 @@ termux_pkg_auto_update() {
 
 termux_step_pre_configure() {
 	sed -i "s/@VERSION@/${TERMUX_PKG_VERSION}/g" $TERMUX_PKG_SRCDIR/Makefile
-	ls -lah /data/data/com.termux/files/usr/lib
+	ls -lah /data/data/com.termux/files/usr/include/
 }
 
 termux_step_post_configure() {
