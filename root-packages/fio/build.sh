@@ -7,7 +7,6 @@ TERMUX_PKG_SRCURL=https://github.com/axboe/fio/archive/refs/tags/fio-${TERMUX_PK
 TERMUX_PKG_SHA256=9fc81e3a490a53fe821d76dd759d64f229d0ac6b4d2c711837bcad158242e3b2
 TERMUX_PKG_DEPENDS="openssl, libandroid-shmem, libaio"
 TERMUX_PKG_SUGGESTS="python"
-TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_AUTO_UPDATE=true
 TERMUX_PKG_UPDATE_VERSION_REGEXP="\d+\.\d+"
 
