@@ -11,4 +11,3 @@ angle_build_tests = false
 angle_use_vulkan_null_display = @USE_VULKAN_NULL@
 angle_expose_non_conformant_extensions_and_versions = true
 android_static_analysis = "off"
-is_official_build = true   # for performance
